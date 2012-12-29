@@ -1,4 +1,9 @@
 PATH
+  remote: .
+  specs:
+    pry-notebook (0.0.1)
+
+PATH
   remote: /Users/rfitz/src/pry
   specs:
     pry (0.9.11)
@@ -10,20 +15,20 @@ GEM
   remote: http://rubygems.org/
   specs:
     coderay (1.0.8)
+    metaclass (0.0.1)
     method_source (0.8.1)
-    rack (1.4.1)
-    rack-protection (1.3.2)
-      rack
-    sinatra (1.3.3)
-      rack (~> 1.3, >= 1.3.6)
-      rack-protection (~> 1.2)
-      tilt (~> 1.3, >= 1.3.3)
+    minitest (4.3.3)
+    mocha (0.13.1)
+      metaclass (~> 0.0.1)
+    rake (10.0.2)
     slop (3.3.3)
-    tilt (1.3.3)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  minitest
+  mocha
   pry!
-  sinatra
+  pry-notebook!
+  rake
