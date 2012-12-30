@@ -28,16 +28,24 @@ module Pry::Notebook
       @subscribers = {}
 
       @pry.callbacks.handle_result = proc do |result|
-        formatted_result = result.inspect
+        @pry.guard_output do
+          formatted_result = result.inspect
 
-        publish type: :result, value: formatted_result
+          publish type: :result, value: formatted_result
+        end
       end
 
       @pry.callbacks.handle_error = proc do |error|
-        message   = "#{error.class}: #{error.message}"
-        backtrace = error.backtrace.join("\n")
+        @pry.guard_output do
+          message   = "#{error.class}: #{error.message}"
+          backtrace = error.backtrace.join("\n")
 
-        publish type: :error, value: message, backtrace: backtrace
+          publish type: :error, value: message, backtrace: backtrace
+        end
+      end
+
+      @pry.callbacks.handle_continuation = proc do |eval_string|
+        publish type: :continuation, value: eval_string
       end
 
       @output.handle_chunk = proc do |string|

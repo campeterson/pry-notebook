@@ -43,6 +43,16 @@ describe Pry::Notebook::Pry do
     end
   end
 
+  it "captures continued expressions" do
+    @pry.eval "def x"
+
+    find_entry(:continuation) do |value|
+      value.must_equal "def x\n"
+    end
+
+    @pry.eval "!"
+  end
+
   it "doesn't use color" do
     @pry.eval "ls"
 
