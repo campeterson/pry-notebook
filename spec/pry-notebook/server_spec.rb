@@ -19,10 +19,20 @@ describe Pry::Notebook::Server do
     server && server.terminate
   end
 
-  it "should respond to a non-WebSocket request" do
+  it "should serve the home page via GET" do
     with_server do
       response = Net::HTTP.get url
-      response.must_equal "OK\n"
+      response.must_equal \
+        File.read(File.expand_path("../../../public/index.html", __FILE__))
+    end
+  end
+
+  it "should accept input for Pry via POST" do
+    Pry::Notebook::Pry.any_instance.expects(:eval).with('puts "hey & baby"')
+
+    with_server do
+      http = Net::HTTP.new(url.host, url.port)
+      http.post url.path, 'puts "hey & baby"'
     end
   end
 end
