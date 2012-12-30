@@ -4,11 +4,13 @@ require "helper"
 
 describe Pry::Notebook::Pry do
   before do
-    @pry = Pry::Notebook::Pry.new(:output => [])
+    @pry = Pry::Notebook::Pry.new
+    @out = []
+    @pry.subscribe('test', @out)
   end
 
   def find_entry(type)
-    entry = @pry.output.find { |e| e[:type] == type }
+    entry = @out.find { |e| e[:type] == type }
 
     refute entry.nil?,
       "Couldn't find entry of type #{type.inspect} in #{@pry.output.inspect}"

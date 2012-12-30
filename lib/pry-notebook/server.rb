@@ -3,37 +3,15 @@ require 'json'
 
 module Pry::Notebook
   class Server < Reel::Server
-    class MultiOutput
-      attr_reader :subscribers
-
-      def initialize
-        @subscribers = []
-      end
-
-      def <<(obj)
-        @subscribers.each do |s|
-          s << obj
-        end
-      end
-
-      def register(subscriber)
-        @subscribers << subscriber
-      end
-
-      def unregister(subscriber)
-        @subscribers.delete subscriber
-      end
-    end
-
     class Client
       include Celluloid
       include Celluloid::Logger
 
-      def initialize(socket, multi_output)
+      def initialize(socket, pry)
         @socket = socket
-        @multi_output = multi_output
+        @pry    = pry
 
-        @multi_output.register self
+        @pry.subscribe self.object_id, self
       end
 
       def <<(obj)
@@ -46,17 +24,17 @@ module Pry::Notebook
       def terminate(*)
         super
       ensure
-        @multi_output.unregister self
+        @pry.unsubscribe self.object_id
       end
     end
 
     include Celluloid::Logger
 
     def initialize(host = "127.0.0.1", port = 1234, capture_all = false)
-      @pry = ::Pry::Notebook::Pry.new(output: MultiOutput.new)
+      @pry = ::Pry::Notebook::Pry.new
 
       if capture_all
-        $stdout = @pry.pry.output # fixme :(
+        $stdout = @pry.output
       end
 
       info "Pry::Notebook starting on #{host}:#{port}"
@@ -77,7 +55,7 @@ module Pry::Notebook
           end
         when Reel::WebSocket
           info "Received a WebSocket connection"
-          Client.new(request, @pry.output)
+          Client.new(request, @pry)
         end
       end
     end
