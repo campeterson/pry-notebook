@@ -11,6 +11,7 @@ module Pry::Notebook
 
       def print(str)
         handle_chunk.call(str)
+        nil
       end
       alias write print
 
