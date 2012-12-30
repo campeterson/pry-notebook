@@ -12,7 +12,7 @@ describe Pry::Notebook::Server do
   end
 
   def with_server
-    Celluloid.logger = nil
+    Celluloid.logger.level = Logger::ERROR
     server = Pry::Notebook::Server.new(host, port)
     yield server
   ensure
@@ -22,7 +22,7 @@ describe Pry::Notebook::Server do
   it "should respond to a non-WebSocket request" do
     with_server do
       response = Net::HTTP.get url
-      response.must_equal "OK"
+      response.must_equal "OK\n"
     end
   end
 end

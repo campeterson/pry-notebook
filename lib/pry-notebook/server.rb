@@ -51,17 +51,20 @@ module Pry::Notebook
       while request = connection.request
         case request
         when Reel::Request
-          info "Received an HTTP connection"
-          connection.respond :ok, "OK"
+          case request.method.to_s
+          when "post"
+          when "get"
+            connection.respond :ok, public_file("/index.html")
+          end
         when Reel::WebSocket
           info "Received a WebSocket connection"
-          route_websocket request
+          Client.new(socket, @pry.output)
         end
       end
     end
 
-    def route_websocket(socket)
-      Client.new(socket, @pry.output)
+    def public_file(path)
+      File.read(File.expand_path("../../../public#{path}", __FILE__))
     end
   end
 end
