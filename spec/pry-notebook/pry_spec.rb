@@ -41,6 +41,14 @@ describe Pry::Notebook::Pry do
     end
   end
 
+  it "doesn't use color" do
+    @pry.eval "ls"
+
+    find_entry(:output) do |value|
+      value.wont_match /^\e\[/
+    end
+  end
+
   it "captures arbitrary output to $stdout" do
     @pry.eval "puts 'hey'"
 

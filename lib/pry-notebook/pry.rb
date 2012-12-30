@@ -42,6 +42,9 @@ module Pry::Notebook
       @pry.output.handle_chunk = proc do |string|
         @output << { type: :output, value: string }
       end
+
+      # Temp until better config system
+      ::Pry.config.color = false
     end
 
     def eval(str)
