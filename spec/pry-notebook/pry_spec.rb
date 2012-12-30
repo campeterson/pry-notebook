@@ -9,7 +9,10 @@ describe Pry::Notebook::Pry do
 
   def find_entry(type)
     entry = @pry.output.find { |e| e[:type] == type }
-    refute entry.nil?, "Couldn't find entry of type #{type.inspect}"
+
+    refute entry.nil?,
+      "Couldn't find entry of type #{type.inspect} in #{@pry.output.inspect}"
+
     yield entry[:value]
   end
 
@@ -33,8 +36,16 @@ describe Pry::Notebook::Pry do
   it "captures command output" do
     @pry.eval "ls"
 
-    find_entry(:pry_output) do |value|
-      assert_match /_in_/, value
+    find_entry(:output) do |value|
+      value.must_match /_in_/
+    end
+  end
+
+  it "captures arbitrary output to $stdout" do
+    @pry.eval "puts 'hey'"
+
+    find_entry(:output) do |value|
+      value.must_equal "hey\n"
     end
   end
 end

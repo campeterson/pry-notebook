@@ -13,13 +13,18 @@ module Pry::Notebook
         handle_chunk.call(str)
       end
       alias write print
+
+      def tty?
+        false
+      end
     end
 
     attr_reader :output
 
     def initialize(options)
-      @output = options.delete :output
-      @pry    = ::Pry.new(:output => Output.new)
+      @output      = options.delete :output
+      @default_out = options.fetch(:default_out) { STDOUT }
+      @pry         = ::Pry.new(:output => Output.new)
 
       @pry.callbacks.handle_result = proc do |result|
         formatted_result = result.inspect
@@ -35,12 +40,15 @@ module Pry::Notebook
       end
 
       @pry.output.handle_chunk = proc do |string|
-        @output << { type: :pry_output, value: string }
+        @output << { type: :output, value: string }
       end
     end
 
     def eval(str)
+      $stdout = @pry.output
       @pry.eval str
+    ensure
+      $stdout = @default_out
     end
   end
 end
