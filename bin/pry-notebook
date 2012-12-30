@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+
+$:.unshift File.expand_path("../../lib", __FILE__)
+
+require "pry-notebook"
+
+Pry::Notebook::Server.supervise_as :server
+sleep
