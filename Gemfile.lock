@@ -1,17 +1,19 @@
+GIT
+  remote: git://github.com/pry/pry.git
+  revision: 66d1fdd617b0c8fe1031225fc5dbfb4163a53fce
+  branch: wip.refactor.callbacks
+  specs:
+    pry (0.9.11)
+      coderay (~> 1.0.5)
+      method_source (~> 0.8)
+      slop (~> 3.3.1)
+
 PATH
   remote: .
   specs:
     pry-notebook (0.0.1)
       pry
       reel
-
-PATH
-  remote: /Users/rfitz/src/pry
-  specs:
-    pry (0.9.11)
-      coderay (~> 1.0.5)
-      method_source (~> 0.8)
-      slop (~> 3.3.1)
 
 GEM
   remote: http://rubygems.org/
