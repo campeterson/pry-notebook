@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-module Pry
+class Pry
   module Notebook
     VERSION = "0.0.1"
   end
