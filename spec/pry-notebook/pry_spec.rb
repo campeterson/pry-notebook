@@ -29,4 +29,12 @@ describe Pry::Notebook::Pry do
       assert_match /`blhubhlubhulghulbhulg'/, value
     end
   end
+
+  it "captures command output" do
+    @pry.eval "ls"
+
+    find_entry(:pry_output) do |value|
+      assert_match /_in_/, value
+    end
+  end
 end
