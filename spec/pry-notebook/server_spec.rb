@@ -11,16 +11,8 @@ describe Pry::Notebook::Server do
     URI.parse("http://#{host}:#{port}#{path}")
   end
 
-  def with_server
-    Celluloid.logger.level = Logger::ERROR
-    server = Pry::Notebook::Server.new(host, port)
-    yield server
-  ensure
-    server && server.terminate
-  end
-
   it "should serve the home page via GET" do
-    with_server do
+    with_server(host, port) do
       response = Net::HTTP.get url
       response.must_equal \
         File.read(File.expand_path("../../../public/index.html", __FILE__))
@@ -30,9 +22,20 @@ describe Pry::Notebook::Server do
   it "should accept input for Pry via POST" do
     Pry::Notebook::Pry.any_instance.expects(:eval).with('puts "hey & baby"')
 
-    with_server do
+    with_server(host, port) do
       http = Net::HTTP.new(url.host, url.port)
       http.post url.path, 'puts "hey & baby"'
+    end
+  end
+
+  it "should send return values via socket" do
+    with_server(host, port) do
+      with_websocket do |client|
+        http = Net::HTTP.new(url.host, url.port)
+        http.post url.path, '10'
+
+        get_message(client).must_equal "type" => "result", "value" => "10"
+      end
     end
   end
 end
