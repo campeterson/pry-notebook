@@ -1,5 +1,6 @@
 require 'reel'
 require 'json'
+require 'rack/builder'
 
 module Pry::Notebook
   class Server < Reel::Server
@@ -28,6 +29,14 @@ module Pry::Notebook
       end
     end
 
+    GetHandler = Rack::Builder.new do
+      use Rack::Static,
+        urls: [""],
+        root: File.expand_path("../files", __FILE__),
+        index: "index.html"
+      run proc { |env| [404, {}, ["Not Found"]] }
+    end
+
     include Celluloid::Logger
 
     def initialize(host = "127.0.0.1", port = 1234, capture_all = false)
@@ -51,7 +60,11 @@ module Pry::Notebook
             @pry.eval request.body
             connection.respond :ok, "OK"
           when "get"
-            connection.respond :ok, public_file("/index.html")
+            resp   = GetHandler.call(rack_env(request))
+            result = ""
+            resp[2].each { |p| result << p }
+            code   = resp[0] == 200 ? :ok : :not_found
+            connection.respond code, result
           end
         when Reel::WebSocket
           info "Received a WebSocket connection"
@@ -62,6 +75,15 @@ module Pry::Notebook
 
     def public_file(path)
       File.read(File.expand_path("../../../public#{path}", __FILE__))
+    end
+
+    def rack_env(request)
+      env = Hash[Reel::RackWorker::PROTO_RACK_ENV]
+      env['HTTP_VERSION']   = request.version
+      env['REQUEST_METHOD'] = request.method.to_s.upcase
+      env['PATH_INFO']      = request.path
+      env['QUERY_STRING']   = request.query_string || ''
+      env
     end
   end
 end
