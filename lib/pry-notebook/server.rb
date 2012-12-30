@@ -52,8 +52,12 @@ module Pry::Notebook
 
     include Celluloid::Logger
 
-    def initialize(host = "127.0.0.1", port = 1234)
+    def initialize(host = "127.0.0.1", port = 1234, capture_all = false)
       @pry = ::Pry::Notebook::Pry.new(output: MultiOutput.new)
+
+      if capture_all
+        $stdout = @pry.pry.output # fixme :(
+      end
 
       info "Pry::Notebook starting on #{host}:#{port}"
       super(host, port, &method(:on_connection))
@@ -65,6 +69,7 @@ module Pry::Notebook
         when Reel::Request
           case request.method.to_s
           when "post"
+            info "Evaluating #{request.body.inspect}"
             @pry.eval request.body
             connection.respond :ok, "OK"
           when "get"
@@ -72,7 +77,7 @@ module Pry::Notebook
           end
         when Reel::WebSocket
           info "Received a WebSocket connection"
-          Client.new(socket, @pry.output)
+          Client.new(request, @pry.output)
         end
       end
     end

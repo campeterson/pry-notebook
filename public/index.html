@@ -1,1 +1,46 @@
-OK
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Pry Notebook</title>
+  <style>
+    .content {
+      width: 800px;
+      margin: 0 auto;
+      background: #EEEEEE;
+      padding: 1em;
+    }
+  </style>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+  <script>
+    $(function () {
+        var klass  = ("MozWebSocket" in window) ? MozWebSocket : WebSocket,
+            socket = new klass('ws://' + window.location.host);
+
+        socket.onmessage = function (msg) {
+            var data = JSON.parse(msg.data),
+                div  = $('<div/>');
+
+            div.addClass("pry-" + data.type);
+            div.text(data.value);
+            $('.output').append(div);
+        }
+
+        $('input').on('keyup', function (e) {
+            if (e.keyCode == 13) {
+                $.post('/', $(this).val());
+                $(this).val('');
+            }
+        });
+    });
+  </script>
+</head>
+<body>
+  <div class="content">
+    <h1>Pry Notebook</h1>
+    <div class="output"></div>
+    <input type="text"></input>
+  </div>
+</body>
+</html>

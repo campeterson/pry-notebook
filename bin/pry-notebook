@@ -4,5 +4,5 @@ $:.unshift File.expand_path("../../lib", __FILE__)
 
 require "pry-notebook"
 
-Pry::Notebook::Server.supervise_as :server
+Pry::Notebook::Server.supervise_as :server, "127.0.0.1", 1234, true
 sleep

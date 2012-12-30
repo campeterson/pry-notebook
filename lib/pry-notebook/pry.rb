@@ -19,12 +19,11 @@ module Pry::Notebook
       end
     end
 
-    attr_reader :output
+    attr_reader :output, :pry
 
     def initialize(options)
-      @output      = options.delete :output
-      @default_out = options.fetch(:default_out) { STDOUT }
-      @pry         = ::Pry.new(:output => Output.new)
+      @output = options.delete :output
+      @pry    = ::Pry.new(:output => Output.new)
 
       @pry.callbacks.handle_result = proc do |result|
         formatted_result = result.inspect
@@ -48,10 +47,11 @@ module Pry::Notebook
     end
 
     def eval(str)
+      out     = $stdout
       $stdout = @pry.output
       @pry.eval str
     ensure
-      $stdout = @default_out
+      $stdout = out
     end
   end
 end
