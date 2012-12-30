@@ -16,10 +16,10 @@ describe Pry::Notebook::Server do
     server = Pry::Notebook::Server.new(host, port)
     yield server
   ensure
-    server.terminate
+    server && server.terminate
   end
 
-  it "should respond" do
+  it "should respond to a non-WebSocket request" do
     with_server do
       response = Net::HTTP.get url
       response.must_equal "OK"
