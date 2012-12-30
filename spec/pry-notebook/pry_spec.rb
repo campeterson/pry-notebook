@@ -13,11 +13,11 @@ describe Pry::Notebook::Pry do
     yield entry[:value]
   end
 
-  it "captures return values" do
-    @pry.eval "10"
+  it "captures and inspects return values" do
+    @pry.eval "'10'"
 
     find_entry(:result) do |value|
-      value.must_equal 10
+      value.must_equal "\"10\""
     end
   end
 
@@ -25,7 +25,8 @@ describe Pry::Notebook::Pry do
     @pry.eval "blhubhlubhulghulbhulg"
 
     find_entry(:error) do |value|
-      value.must_be_instance_of NameError
+      assert_match /^NameError/, value
+      assert_match /`blhubhlubhulghulbhulg'/, value
     end
   end
 end
