@@ -1,0 +1,19 @@
+.content {
+    width: 800px;
+    margin: 0 auto;
+    background: #EEEEEE;
+    padding: 16px;
+}
+
+.output, input {
+    font-family: Monaco, Consolas, monospace;
+    font-size: 16px;
+}
+
+input {
+    border: none;
+    width: 800px;
+    position: relative;
+    left: -8px;
+    padding: 2px 8px;
+}
