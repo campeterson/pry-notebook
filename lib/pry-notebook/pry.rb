@@ -67,7 +67,7 @@ module Pry::Notebook
     end
 
     def unsubscribe(identifier)
-      @subscribers[identifier] = nil
+      @subscribers.delete(identifier)
     end
 
     def eval(str)

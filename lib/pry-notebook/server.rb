@@ -2,7 +2,13 @@ require 'reel'
 require 'json'
 require 'rack/builder'
 
+require 'pry-notebook/pry'
+
 module Pry::Notebook
+  class Pry
+    include Celluloid
+  end
+
   class Server < Reel::Server
     class Client
       include Celluloid
@@ -10,9 +16,9 @@ module Pry::Notebook
 
       def initialize(socket, pry)
         @socket = socket
-        @pry    = pry
+        @pry    = pry.async
 
-        @pry.subscribe self.object_id, self
+        @pry.subscribe self.object_id, self.async
       end
 
       def <<(obj)
@@ -57,7 +63,7 @@ module Pry::Notebook
           case request.method.to_s
           when "post"
             info "Evaluating #{request.body.inspect}"
-            @pry.eval request.body
+            @pry.async.eval request.body
             connection.respond :ok, "OK"
           when "get"
             resp   = GetHandler.call(rack_env(request))
