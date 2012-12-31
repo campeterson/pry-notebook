@@ -54,6 +54,7 @@ module Pry::Notebook
 
       # Temp until better config system
       ::Pry.config.color = false
+      ::Pry.config.pager = false
     end
 
     def publish(event)
