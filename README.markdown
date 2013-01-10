@@ -8,23 +8,23 @@ Just clone it if you want to try it out. If you want to contribute. Please fork 
 
 ### Run the tests
 
-  rake test
+    rake test
 
 ### Run Bundler to get the dependencies
 
-  bundle install
+    bundle install
 
 ### Build the Gem
 
-  gem build pry-notebook.gemspec
+    gem build pry-notebook.gemspec
 
 ### Install the Gem
 
-  gem install pry-notebook
+    gem install pry-notebook
 
 ### Start Pry Notebook
 
-  pry-notebook
+    pry-notebook
 
 ## Contributing
 
