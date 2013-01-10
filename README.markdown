@@ -25,6 +25,8 @@ Just clone it if you want to try it out. If you want to contribute. Please fork 
 ### Start Pry Notebook
 
     pry-notebook
+    
+### Go to Pry Notebook in your browser `127.0.0.1:1234`
 
 ## Contributing
 
