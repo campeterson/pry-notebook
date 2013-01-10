@@ -8,8 +8,8 @@ Gem::Specification.new do |gem|
   gem.version       = Pry::Notebook::VERSION
   gem.authors       = ["Ryan Fitzgerald"]
   gem.email         = ["rwfitzge@gmail.com"]
-  gem.description   = %q{TODO: Write a gem description}
-  gem.summary       = %q{TODO: Write a gem summary}
+  gem.description   = %q{Pry Notebook}
+  gem.summary       = %q{A browser implementation of the Pry Ruby interactive shell - inspired by iPython Notebook}
   gem.homepage      = ""
 
   gem.files         = `git ls-files`.split($/)

@@ -2,7 +2,28 @@
 
 ## Getting Started
 
-TODO
+### Clone the repo
+Just clone it if you want to try it out. If you want to contribute. Please fork it.
+
+### Run the tests
+
+  rake test
+
+### Run Bundler to get the dependencies
+
+  bundle install
+
+### Build the Gem
+
+  gem build pry-notebook.gemspec
+
+### Install the Gem
+
+  gem install pry-notebook
+
+### Start Pry Notebook
+
+  pry-notebook
 
 ## Contributing
 
