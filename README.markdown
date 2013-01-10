@@ -1,4 +1,5 @@
-# What is Pry Notebook?
+# Pry Notebook
+A browser implementation of the Pry Ruby interactive shell - inspired by iPython Notebook
 
 ## Getting Started
 
